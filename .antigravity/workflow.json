@@ -1,0 +1,31 @@
+{
+  "project": "BeBank Digital Banking Platform",
+  "version": "1.0.0",
+  "theme": {
+    "navyBlue": "#173B73",
+    "emeraldGreen": "#079669",
+    "white": "#FFFFFF"
+  },
+  "environment": "windows",
+  "requirePermissionFor": [
+    "system_software_installation",
+    "administrator_commands",
+    "sensitive_env_changes",
+    "external_cloud_deployment"
+  ],
+  "commands": {
+    "setupWindows": "scripts\\setup_windows.bat",
+    "startAll": "scripts\\start_bebank.bat",
+    "runTests": "scripts\\run_tests.bat",
+    "backendSetup": "cd backend && python -m venv venv && .\\venv\\Scripts\\pip install -r requirements.txt && .\\venv\\Scripts\\python manage.py makemigrations accounts banking cards loans support admin_portal && .\\venv\\Scripts\\python manage.py migrate && .\\venv\\Scripts\\python manage.py seed_bebank",
+    "backendRun": "cd backend && .\\venv\\Scripts\\python manage.py runserver 127.0.0.1:8000",
+    "frontendSetup": "cd frontend && npm install",
+    "frontendRun": "cd frontend && npm run dev -- --port 5173"
+  },
+  "urls": {
+    "frontend": "http://localhost:5173",
+    "backendApi": "http://127.0.0.1:8000/api",
+    "swaggerDocs": "http://127.0.0.1:8000/api/docs/",
+    "djangoAdmin": "http://127.0.0.1:8000/django-admin/"
+  }
+}

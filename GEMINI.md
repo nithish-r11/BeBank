@@ -1,0 +1,116 @@
+# BeBank – Google Antigravity AI Workspace Guide & Agent Instructions
+
+Welcome, **Google Antigravity AI**! This project is **BeBank ("Your Trusting for Tomorrow")**, a full-stack Digital Banking Platform built for a modern, intuitive BeBank experience.
+
+## 1. Critical Permission & Safety Protocol for Antigravity AI
+The user wants **you (Google Antigravity)** to handle setup, configuration, running, testing, debugging, and deployment step by step **without requiring the user to manually type long commands**.
+However, **you MUST ask for the user's explicit permission before**:
+1. Installing global system software (e.g., Python, Node.js, PostgreSQL, Docker, Git) or running commands requiring Windows Administrator privileges.
+2. Modifying sensitive `.env` secrets, production database credentials, or firewall/port rules.
+3. Connecting to external cloud accounts, domain registrars, or live deployment services (e.g., Render, Railway, AWS, GCP, Vercel).
+4. Remember: **BeBank operates in Demo Banking Mode (`DEMO_BANKING_MODE=True`)**. Never connect live payment rails or real-money banking APIs without formal regulatory licensing and explicit legal authorization.
+
+---
+
+## 2. Project Architecture Overview
+- **Brand Colors**:
+  - Navy Blue: `#173B73`
+  - Emerald Green: `#079669`
+  - Pure White: `#FFFFFF`
+- **Backend (`/backend`)**:
+  - Python 3.11+ & Django 5.x + Django REST Framework (DRF)
+  - JWT Authentication (`djangorestframework-simplejwt`) + BeBank-style 4-digit MPIN verification
+  - Modular Apps:
+    - `apps.accounts`: Custom User model (`CUSTOMER` & `ADMIN` roles), KYC management, MPIN security, Audit Logging
+    - `apps.banking`: Savings/Current accounts, Beneficiaries, Atomic Fund Transfers (IMPS/NEFT/RTGS/UPI/Internal), Fixed & Recurring Deposits (FD/RD), Utility Bill Payments
+    - `apps.cards`: Debit & Credit Card management, instant usage toggles (Domestic, International, Contactless, Online, ATM), spending limits, card freeze/unfreeze, PIN reset
+    - `apps.loans`: Personal, Home, Vehicle, and Education loans with EMI calculator and Admin approval/disbursal workflow
+    - `apps.support`: Customer Service Requests (Cheque book, Stop payment, KYC update, Transaction dispute)
+    - `apps.admin_portal`: Full Admin Portal API for executive KPIs, KYC approvals, account freeze/unfreeze, demo balance top-up, transaction flagging, loan disbursal, and system audit logs
+- **Frontend (`/frontend`)**:
+  - React 18 + Vite + Tailwind CSS + Lucide Icons + React Router v6
+  - **Public Landing Page**: Product showcase, EMI/FD calculators, security assurance, quick login
+  - **Customer Portal (`/app/*`)**: BeBank-inspired dashboard, My Accounts & Passbook Statement (CSV export & print), Fund Transfer & UPI, Beneficiaries, Cards Control Center, Fixed/Recurring Deposits, Loans & EMI Calculator, Bill Pay & Recharge, Service Requests, Security & MPIN Settings
+  - **Admin Portal (`/admin-portal/*`)**: Real-time Executive Dashboard, Customer & KYC Management, Transaction Compliance Monitor, Loan Approvals & Disbursals, Support Ticket Desk, Security Audit Trail
+  - **Resilient Hybrid API Layer**: Automatically connects to the live Django backend at `http://127.0.0.1:8000/api` and includes a synchronized stateful fallback engine so the UI can also be previewed instantaneously.
+
+---
+
+## 3. Step-by-Step Execution Playbook for Google Antigravity on Windows PC
+
+When the user opens this project in Google Antigravity and says *"Set up and run BeBank"*, follow these exact steps:
+
+### Step 1: Check Prerequisites on Windows
+Run non-destructive version checks first:
+```powershell
+python --version
+node --version
+npm --version
+```
+- If Python 3.10+ or Node.js 18+ is missing, inform the user clearly and ask permission to install them (e.g., via `winget install Python.Python.3.12` and `winget install OpenJS.NodeJS.LTS`).
+
+### Step 2: Configure Backend Virtual Environment & Dependencies
+Ask the user for permission to create the Python virtual environment and install backend packages, then run:
+```powershell
+cd backend
+python -m venv venv
+.\venv\Scripts\activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### Step 3: Environment Variables & Database Setup
+- A safe local `.env` is already pre-configured in `backend/.env` using SQLite (`db.sqlite3`) for zero-friction startup on Windows.
+- If the user wishes to switch to PostgreSQL, update `DB_ENGINE=postgresql` and `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` in `backend/.env`.
+- Run migrations and seed the rich demo banking dataset:
+```powershell
+cd backend
+.\venv\Scripts\python manage.py makemigrations accounts banking cards loans support admin_portal
+.\venv\Scripts\python manage.py migrate
+.\venv\Scripts\python manage.py seed_bebank
+```
+
+### Step 4: Install Frontend Dependencies
+```powershell
+cd frontend
+npm install
+```
+
+### Step 5: Start Both Servers & Open Browser
+Start the Django backend on port `8000` and the React Vite frontend on port `5173`:
+- **Backend terminal**:
+  ```powershell
+  cd backend
+  .\venv\Scripts\python manage.py runserver 127.0.0.1:8000
+  ```
+- **Frontend terminal**:
+  ```powershell
+  cd frontend
+  npm run dev -- --port 5173 --open
+  ```
+- Or simply execute `scripts\start_bebank.bat` from the project root!
+
+### Step 6: Default Demo Credentials (Seeded by `seed_bebank`)
+| Portal | Role | Email / Login ID | Password | Transaction MPIN |
+| :--- | :--- | :--- | :--- | :--- |
+| **Customer Portal** | Primary Customer | `manojkumar@bebank.in` (or CIF `BEB1002045`) | `BeBank@2026` | `1234` |
+| **Customer Portal** | Second Customer | `priya.sharma@bebank.in` (or CIF `BEB1002046`) | `BeBank@2026` | `5678` |
+| **Admin Portal** | Bank Administrator | `murugananthan@bebank.in` (or CIF `BEB9990001`) | `Admin@BeBank2026` | `9999` |
+
+### Step 7: Automated Testing & Verification
+To verify backend integrity and API security:
+```powershell
+cd backend
+.\venv\Scripts\python manage.py test
+```
+To verify frontend production build:
+```powershell
+cd frontend
+npm run build
+```
+
+### Step 8: Production & Online Deployment Guide
+When the user asks you to deploy BeBank online:
+1. Ask the user which hosting provider they prefer (**Render**, **Railway**, **DigitalOcean/AWS Docker**, or **Vercel + Render**).
+2. Use the included `docker-compose.yml`, `render.yaml`, `backend/Dockerfile`, `frontend/Dockerfile`, and `nginx/nginx.conf`.
+3. Ask permission before setting production secrets (`DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `ALLOWED_HOSTS`, `DATABASE_URL`, `CORS_ALLOWED_ORIGINS`).

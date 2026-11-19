@@ -1,0 +1,14 @@
+{
+  "name": "bebank-root",
+  "private": true,
+  "version": "1.0.0",
+  "description": "BeBank Complete Digital Banking Platform (Root Workspace Runner)",
+  "scripts": {
+    "install-all": "npm --prefix frontend install",
+    "dev": "npm --prefix frontend install && npm --prefix frontend run dev -- --open",
+    "start": "npm --prefix frontend run dev -- --open",
+    "build": "npm --prefix frontend run build",
+    "setup-windows": "scripts\\\\setup_windows.bat",
+    "start-all": "scripts\\\\start_bebank.bat"
+  }
+}
